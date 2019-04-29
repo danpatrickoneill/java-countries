@@ -13,6 +13,8 @@ import java.util.ArrayList;
 @RequestMapping("/data")
 public class CountryController
 {
+    private int medianIndex = CountriesApplication.ourCountries.countriesList.size() / 2;
+
     // Name-based endpoints
     // localhost:8080/data/names/***
     @RequestMapping(value = "/names/all")
@@ -57,6 +59,12 @@ public class CountryController
         CountriesApplication.ourCountries.countriesList.sort((c1, c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
         return new ResponseEntity<>(CountriesApplication.ourCountries.countriesList.get(0), HttpStatus.OK);
     }
+    @GetMapping(value = "/population/median")
+    public ResponseEntity<?> getCountryWithMedianPopulation()
+    {
+        CountriesApplication.ourCountries.countriesList.sort((c1, c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
+        return new ResponseEntity<>(CountriesApplication.ourCountries.countriesList.get(medianIndex), HttpStatus.OK);
+    }
 
     // Median age-based endpoints
     // localhost:8080/data/age/***
@@ -76,7 +84,13 @@ public class CountryController
     @GetMapping(value = "/age/max")
     public ResponseEntity<?> getCountryWithLargestMedianAge()
     {
-        CountriesApplication.ourCountries.countriesList.sort((c1, c2) -> (int)(c2.getMedianAge() - c1.getMedianAge()));
+        CountriesApplication.ourCountries.countriesList.sort((c1, c2) -> (c2.getMedianAge() - c1.getMedianAge()));
         return new ResponseEntity<>(CountriesApplication.ourCountries.countriesList.get(0), HttpStatus.OK);
+    }
+    @GetMapping(value = "/age/median")
+    public ResponseEntity<?> getCountryWithMedianMedianAge()
+    {
+        CountriesApplication.ourCountries.countriesList.sort((c1, c2) -> (c2.getMedianAge() - c1.getMedianAge()));
+        return new ResponseEntity<>(CountriesApplication.ourCountries.countriesList.get(medianIndex), HttpStatus.OK);
     }
 }
